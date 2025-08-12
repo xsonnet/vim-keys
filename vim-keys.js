@@ -1,4 +1,3 @@
-// Vim风格快捷键系统
 class VimKeys {
   constructor(config = {}) {
     // 默认配置
@@ -16,12 +15,12 @@ class VimKeys {
     this.keyBuffer = ''
     this.keyTimeout = null
     this.isSearchActive = false
-    this.statusElement = document.getElementById('vimStatus')
-    this.searchOverlay = document.getElementById('searchOverlay')
-    this.searchInput = document.getElementById('searchInput')
     
     // 初始化国际化
     this.initI18n()
+    
+    // 动态创建必要的HTML元素
+    this.createElements()
     
     this.init()
   }
@@ -63,6 +62,141 @@ class VimKeys {
     return this.i18n[this.config.language][key] || key
   }
 
+  // 动态创建必要的HTML元素
+  createElements() {
+    // 创建状态显示元素
+    this.createStatusElement()
+    
+    // 创建搜索覆盖层
+    this.createSearchOverlay()
+    
+    // 添加必要的CSS样式
+    this.addStyles()
+  }
+
+  // 创建状态显示元素
+  createStatusElement() {
+    // 检查是否已存在
+    if (document.getElementById('vimStatus')) {
+      this.statusElement = document.getElementById('vimStatus')
+      return
+    }
+
+    this.statusElement = document.createElement('div')
+    this.statusElement.id = 'vimStatus'
+    this.statusElement.className = 'vim-status'
+    this.statusElement.textContent = this.t('ready')
+    
+    document.body.appendChild(this.statusElement)
+  }
+
+  // 创建搜索覆盖层
+  createSearchOverlay() {
+    // 检查是否已存在
+    if (document.getElementById('search-overlay')) {
+      this.searchOverlay = document.getElementById('search-overlay')
+      this.searchInput = document.getElementById('search-input')
+      return
+    }
+
+    // 创建搜索覆盖层
+    this.searchOverlay = document.createElement('div')
+    this.searchOverlay.id = 'search-overlay'
+    this.searchOverlay.className = 'search-overlay'
+    this.searchOverlay.style.display = 'none'
+
+    // 创建搜索框容器
+    const searchBox = document.createElement('div')
+    searchBox.className = 'search-box'
+
+    // 创建搜索输入框
+    this.searchInput = document.createElement('input')
+    this.searchInput.id = 'search-input'
+    this.searchInput.className = 'search-input'
+    this.searchInput.type = 'text'
+    this.searchInput.placeholder = this.t('searchPlaceholder')
+
+    // 创建提示文本
+    const helpText = document.createElement('p')
+    helpText.style.margin = '8px 0 0 0'
+    helpText.style.color = '#666'
+    helpText.style.fontSize = '12px'
+    helpText.textContent = this.t('searchClose')
+
+    // 组装元素
+    searchBox.appendChild(this.searchInput)
+    searchBox.appendChild(helpText)
+    this.searchOverlay.appendChild(searchBox)
+    
+    document.body.appendChild(this.searchOverlay)
+  }
+
+  // 添加必要的CSS样式
+  addStyles() {
+    // 检查是否已添加样式
+    if (document.getElementById('vim-keys-styles')) {
+      return
+    }
+
+    const style = document.createElement('style')
+    style.id = 'vim-keys-styles'
+    style.textContent = `
+      .vim-status {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background: #333;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        z-index: 9998;
+        user-select: none;
+        pointer-events: none;
+      }
+      
+      .search-overlay {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 300px;
+        z-index: 9999;
+      }
+      
+      .search-box {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid #ddd;
+      }
+      
+      .search-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        outline: none;
+      }
+      
+      .search-input:focus {
+        border-color: #007cba;
+      }
+      
+      .search-highlight {
+        background-color: yellow;
+        color: black;
+        padding: 1px 2px;
+        border-radius: 2px;
+      }
+    `
+    
+    document.head.appendChild(style)
+  }
+
   init() {
     // 绑定键盘事件
     document.addEventListener('keydown', this.handleKeyDown.bind(this))
@@ -77,11 +211,6 @@ class VimKeys {
       this.updateStatus(this.t('ready'))
     } else if (this.statusElement) {
       this.statusElement.style.display = 'none'
-    }
-    
-    // 更新搜索输入框的占位符
-    if (this.searchInput) {
-      this.searchInput.placeholder = this.t('searchPlaceholder')
     }
   }
 
@@ -445,31 +574,3 @@ class VimKeys {
   }
 
 }
-
-// 添加搜索高亮样式
-const style = document.createElement('style')
-style.textContent = `
-  .search-highlight {
-    background-color: yellow;
-    color: black;
-    padding: 1px 2px;
-    border-radius: 2px;
-  }
-`
-document.head.appendChild(style)
-
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', () => {
-  // 可以通过配置对象自定义行为
-  // 示例配置：
-  // const config = {
-  //   showStatus: true,        // 是否显示状态（默认: true）
-  //   animationDuration: 100,  // 动画时长，0为无动画（默认: 100ms）
-  //   disabledKeys: ['x'],     // 禁用的快捷键（默认: []）
-  //   language: 'en'           // 语言 cn/en（默认: 'cn'）
-  // }
-  // window.vimKeys = new VimKeys(config)
-  
-  // 使用默认配置初始化
-  window.vimKeys = new VimKeys()
-})

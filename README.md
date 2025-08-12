@@ -10,6 +10,7 @@
 - 🔍 **非入侵式搜索** - 右上角搜索框，不阻挡页面内容
 - 📱 **现代化设计** - 平滑动画效果，美观的用户界面
 - 🚀 **零依赖** - 纯JavaScript实现，无需任何外部依赖
+- 🏗️ **即插即用** - 自动创建所需HTML元素和样式，无需手动配置
 
 ## 🚀 快速开始
 
@@ -22,24 +23,23 @@
     <title>My Website</title>
 </head>
 <body>
-    <!-- 在body中添加必要的HTML元素 -->
-    <div id="vimStatus"></div>
-    <div id="searchOverlay">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="输入搜索内容...">
-            <p>按 ESC 关闭搜索</p>
-        </div>
-    </div>
+    <!-- 您的页面内容 -->
+    <h1>我的网站</h1>
+    <p>这里是页面内容...</p>
 
     <!-- 引入VimKeys.js -->
     <script src="vim-keys.min.js"></script>
     <script>
         // 使用默认配置初始化
-        const vimKeys = new VimKeys()
+        document.addEventListener('DOMContentLoaded', () => {
+            const vimKeys = new VimKeys()
+        })
     </script>
 </body>
 </html>
 ```
+
+> **注意**: VimKeys.js 会自动创建所需的HTML元素（状态显示器和搜索框），无需手动添加任何HTML元素！
 
 ### 自定义配置
 
@@ -112,47 +112,29 @@ const vimKeys = new VimKeys({ language: 'en' })
 
 ## 🎨 样式自定义
 
-您可以通过CSS自定义样式：
+VimKeys.js 自动创建所需的样式，但您仍可以通过CSS覆盖默认样式：
 
 ```css
-/* 状态显示器样式 */
+/* 自定义状态显示器样式 */
 .vim-status {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    background: #333;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 12px;
+    background: #007cba !important;
+    font-size: 14px !important;
 }
 
-/* 搜索框样式 */
+/* 自定义搜索框样式 */
 .search-overlay {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 300px;
-    z-index: 9999;
+    top: 50px !important;
+    width: 400px !important;
 }
 
-.search-box {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid #ddd;
-}
-
-/* 搜索高亮样式 */
+/* 自定义搜索高亮样式 */
 .search-highlight {
-    background-color: yellow;
-    color: black;
-    padding: 1px 2px;
-    border-radius: 2px;
+    background-color: #ffeb3b !important;
+    border: 1px solid #fbc02d !important;
 }
 ```
+
+> **提示**: 由于样式是通过JavaScript动态添加的，可能需要使用 `!important` 来覆盖默认样式。
 
 ## 🔍 搜索功能
 

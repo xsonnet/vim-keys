@@ -12,40 +12,7 @@
       padding: 20px;
       min-height: 200vh; /* 足够的高度以测试滚动 */
     }
-    .search-overlay {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 300px;
-      display: none;
-      z-index: 9999;
-    }
-    .search-box {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      border: 1px solid #ddd;
-    }
-    .search-input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 2px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    .vim-status {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background: #333;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 12px;
-    }
+
     .content-section {
       margin: 40px 0;
       padding: 20px;
@@ -124,17 +91,23 @@
     <p>这是页面的底部区域。当您按下 'G' 时应该滚动到这里。</p>
   </div>
 
-  <!-- 搜索覆盖层 -->
-  <div class="search-overlay" id="searchOverlay">
-    <div class="search-box">
-      <input type="text" class="search-input" id="searchInput" placeholder="输入搜索内容...">
-      <p style="margin: 8px 0 0 0; color: #666; font-size: 12px;">按 ESC 关闭搜索</p>
-    </div>
-  </div>
-
-  <!-- 状态显示 -->
-  <div class="vim-status" id="vimStatus">就绪</div>
-
-  <script src="vim-keys.js"></script>
+  <script src="vim-keys.min.js"></script>
+  <script>
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      // 可以通过配置对象自定义行为
+      // 示例配置：
+      // const config = {
+      //   showStatus: true,        // 是否显示状态（默认: true）
+      //   animationDuration: 100,  // 动画时长，0为无动画（默认: 100ms）
+      //   disabledKeys: ['x'],     // 禁用的快捷键（默认: []）
+      //   language: 'en'           // 语言 cn/en（默认: 'cn'）
+      // }
+      // window.vimKeys = new VimKeys(config)
+      
+      // 使用默认配置初始化
+      window.vimKeys = new VimKeys()
+    })
+  </script>
 </body>
 </html>
