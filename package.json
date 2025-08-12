@@ -4,7 +4,7 @@
   "description": "A lightweight JavaScript library that adds Vim-like keyboard shortcuts to web pages",
   "main": "vim-keys.min.js",
   "scripts": {
-    "build": "terser index.js -o vim-keys.min.js --compress --mangle --source-map",
+    "build": "terser vim-keys.js -o vim-keys.min.js --compress --mangle --source-map",
     "dev": "python3 -m http.server 8000",
     "serve": "npm run dev"
   },
